@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>API HW</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+</head>
+
+<body>
+    <div id="buttons-view"></div>
+
+    <button data-animal="corgi" data-state="still">Corgi</button>
+    <button data-animal="bunny" data-state="still">Bunny</button>
+    <button data-animal="kitten" data-state="still">Kitten</button>
+    <!-- Where the user will type in their gif topic/hit submit -->
+    <form id="gifs-form"> 
+        <label for="gif-input">Add a GIF</label>
+        <input type="text" id="gif-input"><br> 
+
+        <!-- This is where the user will add their gif -->
+        <input id="add-gif" type="submit" value="Add a GIF">
+    </form>
+    <div id="gifs-view"></div>
+    <script type="text/javascript" src="app.js"></script>
+</body>
+
+</html>
