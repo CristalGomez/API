@@ -1,101 +1,100 @@
 $(document).ready(function () {
-  var startingGifs = ["corgi", "puppy", "bunny", "pig", "kitten"]; // the buttons that initially show up on the page
-  // the page does display gif information when one of these is clicked
+  var startingGifs = []; // the buttons that initially show up on the page
 
-  //the function that displays my var startingGifs
-  function renderButtons() {
-    $("#buttons-view").empty();
+
+  //displaying the Gif information for the new buttons added
+  function displayNewGif() {
+    console.log(this);
+    var newGif = $(this).attr("data-topic");
+    var queryURL = "https://api.giphy.com/v1/gifs/search?q=" + newGif + "&api_key=dc6zaTOxFJmzC&limit=10";
+
+    $.ajax({
+      url: queryURL,
+      method: "GET"
+    }).then(function (response) {
+      var results = response.data;
+      console.log(results)
+      //looping through the array of the new gif added
+      for (var i = 0; i < results.length; i++) { //looping through 10 gifs
+        var displayDiv = $("<div>");
+        var rating = results[i].rating;
+        var p = $("<p>").text("Rating: " + rating);
+        var displayImg = $("<img>");
+        displayImg.attr("src", results[i].images.fixed_height.url);
+        displayDiv.prepend(p);
+        displayDiv.prepend(displayImg);
+        $("#gifs-view").prepend(displayDiv);
+        console.log(displayDiv);
+      }
+    })
+  }
+
+  //this is where the buttons are being placed on the page
+  function displayBtns() {
+    $("#buttons-view").empty(); //calling the HTML element
     for (var i = 0; i < startingGifs.length; i++) {
-      //setting the new buttons
-      var newBtn = $("<button>");
-      newBtn.addClass("gif");
-      newBtn.attr("data-name", startingGifs[i]);
-      newBtn.text(startingGifs[i]);
-      $("#buttons-view").prepend(newBtn);
+      var newBtns = $("<button>");
+      newBtns.addClass("topicBtn"); //this class always for the function to listen to all buttons with a class of topicBtn
+      newBtns.attr("data-topic", startingGifs[i]);
+      newBtns.text(startingGifs[i]);
+      $("#buttons-view").prepend(newBtns);
     }
   }
-  renderButtons();
 
-
-  //user adding a new button to the page
-  //the API does not interact with these buttons
+  //listening to the input from the HTML
   $("#add-gif").on("click", function (event) {
-    event.preventDefault();
-    var newGif = $("#gif-input").val().trim();
-    startingGifs.push(newGif);
-    renderButtons();
-    // This is where I was trying to add the API call so that the new buttons can get their information displayed
-  })
+    event.preventDefault(); //when the user hits "add button" or clicks enter the page does not refresh
+    var addGif = $("#gif-input").val().trim();
+    startingGifs.push(addGif);//adding the new gif to the original array that is being called in the displayBtns function
+    displayBtns();
+  });
 
-  $("button").on("click", function (event) {
-    event.preventDefault();
-    var gifTopic = $(this).attr("data-name");
-    var queryURL = "https://api.giphy.com/v1/gifs/search?q=" +
-      gifTopic + "&api_key=dc6zaTOxFJmzC&limit=10";
+  //this event listener will call the API & display the information
+  $(".topicBtn").on("click", function () {
+
+
+    var gifTopic = $(this).attr("data-topic");
+    var queryURL = "https://api.giphy.com/v1/gifs/search?q=" + gifTopic + "&api_key=dc6zaTOxFJmzC&limit=10";
+    console.log(gifTopic);
     $.ajax({
       url: queryURL,
       method: "GET"
-    })
-      .then(function (response) {
-        var results = response.data;
-        console.log(results);
-        for (var i = 0; i < results.length; i++) {
-          var gifDiv = $("<div>");
-          var rating = results[i].rating;
-          var p = $("<p>").text("Rating: " + rating.toUpperCase());
-          var gifImage = $("<img>");
-          gifImage.attr("src", response.data[i].images.fixed_height.url)
-          gifDiv.prepend(p);
-          gifDiv.prepend(gifImage);
-          $("#gifs-view").prepend(gifDiv)
-        }
-        renderButtons();
-      })
+    }).then(function (response) {
+      var results = response.data;
+
+      for (var i = 0; i < results.length; i++) {
+        var displayDiv = $("<div>");
+        var rating = results[i].rating;
+        var p = $("<p>").text("Rating: " + rating);
+        var displayImg = $("<img>");
+        displayImg.attr("src", results[i].images.fixed_height.url);
+        displayDiv.prepend(p);
+        displayDiv.prepend(displayImg);
+
+        $("#gifs-view").prepend(displayDiv);
+      }
+    });
+
   })
 
-//I made this function so that the gifInfo of each button is displayed
-//This only works for one button clicked
-//I actually don't think this function works at all
-//the button onclick is what is displaying the info
-  function displayGifInfo() {
-    var gifTopic = $(this).attr("data-name");
-    var queryURL = "https://api.giphy.com/v1/gifs/search?q=" +
-      gifTopic + "&api_key=dc6zaTOxFJmzC&limit=10";
-    $.ajax({
-      url: queryURL,
-      method: "GET"
-    })
-      .then(function (response) {
-        // this is displaying the info for each gif on the page
-        //only 10 gifs at a time
-        //only displaying the moving gif + the rating
-        var results = response.data;
-        console.log(results);
-        for (var i = 0; i < results.length; i++) {
-          var gifDiv = $("<div>");
-          var rating = results[i].rating;
-          var p = $("<p>").text("Rating: " + rating.toUpperCase());
-          var gifImage = $("<img>");
-          gifImage.attr("src", response.data[i].images.fixed_height.url)
-          gifDiv.prepend(p);
-          gifDiv.prepend(gifImage);
-          $("#gifs-view").prepend(gifDiv)
-          // this is where I would make the images move/pause
-          $(gifImage).on("click", function(){ // if the image is clicked on, then the if else condition will run
-            var animatedGif = response.data[i].images.fixed_height.url; // referencing the animated gif from the response
-            var stillGif = response.data[i].images.fixed_height.still.url; //referencing the still gif from the repsonse
-            gifImage.attr("src", "still" = stillGif, "animated" = animatedGif) // defining what these states mean by referencing the variable which is referencing the information from the response
-            //the if else statement that will determine if it has been clicked on, then it will either move or pause
-            if (gifImage === "still"){
-              gifImage = "animated"
-            } else {
-              gifImage = "still"
-            }
-          })
+  $("img").on("click", function () {
 
-        }
-        renderButtons();
-      });
-  }
-  $(document).on("click", "gif", displayGifInfo) // I understand that this is what was supposed to display the info for the new buttons, but the displayGifInfo function doesn't work
+    var still = response.data[i].images.fixed_height_still.url
+    var animated = response.data[i].images.fixed_height.url;
+    // console.log(state)
+    var state = $(this).attr("data-state")
+
+
+    if (state === still) {
+      state = animated
+
+    } else if (state === animated) {
+      state = still
+
+    }
+  })
+
+  $(document).on("click", ".topicBtn", displayNewGif)
+
+
 });
