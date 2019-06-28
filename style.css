@@ -3,3 +3,13 @@ body{
     padding: 10px;
     margin: 0 auto;
 }
+
+button, #add-gif{
+    background-color: darkgrey;
+    color: white
+}
+
+button:hover, #add-gif:hover{
+    background-color: transparent;
+    color: black;
+}

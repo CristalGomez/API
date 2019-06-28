@@ -38,7 +38,7 @@ $(document).ready(function () {
       newBtns.addClass("topicBtn"); //this class always for the function to listen to all buttons with a class of topicBtn
       newBtns.attr("data-topic", startingGifs[i]);
       newBtns.text(startingGifs[i]);
-      $("#buttons-view").prepend(newBtns);
+      $("#buttons-view").append(newBtns);
     }
   }
 
