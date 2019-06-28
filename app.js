@@ -4,7 +4,7 @@ $(document).ready(function () {
 
   //displaying the Gif information for the new buttons added
   function displayNewGif() {
-    console.log(this);
+    // console.log(this);
     var newGif = $(this).attr("data-topic");
     var queryURL = "https://api.giphy.com/v1/gifs/search?q=" + newGif + "&api_key=dc6zaTOxFJmzC&limit=10";
 
@@ -13,9 +13,10 @@ $(document).ready(function () {
       method: "GET"
     }).then(function (response) {
       var results = response.data;
-      console.log(results)
+      // console.log(results)
       //looping through the array of the new gif added
       for (var i = 0; i < results.length; i++) { //looping through 10 gifs
+
         var displayDiv = $("<div>");
         var rating = results[i].rating;
         var p = $("<p>").text("Rating: " + rating);
@@ -24,7 +25,7 @@ $(document).ready(function () {
         displayDiv.prepend(p);
         displayDiv.prepend(displayImg);
         $("#gifs-view").prepend(displayDiv);
-        console.log(displayDiv);
+        // console.log(displayDiv);
       }
     })
   }
@@ -46,12 +47,16 @@ $(document).ready(function () {
     event.preventDefault(); //when the user hits "add button" or clicks enter the page does not refresh
     var addGif = $("#gif-input").val().trim();
     startingGifs.push(addGif);//adding the new gif to the original array that is being called in the displayBtns function
+
+    if($("#gif-input").val() === ""){
+      M.toast({html: 'Field cannot be left empty!'})
+      return false
+    }
     displayBtns();
   });
 
   //this event listener will call the API & display the information
   $(".topicBtn").on("click", function () {
-
 
     var gifTopic = $(this).attr("data-topic");
     var queryURL = "https://api.giphy.com/v1/gifs/search?q=" + gifTopic + "&api_key=dc6zaTOxFJmzC&limit=10";
@@ -63,6 +68,11 @@ $(document).ready(function () {
       var results = response.data;
 
       for (var i = 0; i < results.length; i++) {
+
+        var animated = results[i].images.fixed_height.url;
+
+        var still = results[i].images.fixed_height_still.url;
+
         var displayDiv = $("<div>");
         var rating = results[i].rating;
         var p = $("<p>").text("Rating: " + rating);
@@ -77,21 +87,22 @@ $(document).ready(function () {
 
   })
 
+
   $("img").on("click", function () {
 
-    var still = response.data[i].images.fixed_height_still.url
-    var animated = response.data[i].images.fixed_height.url;
-    // console.log(state)
-    var state = $(this).attr("data-state")
-
+    var animated = results[i].images.fixed_height.url;
+    var still = results[i].images.fixed_height_still.url;
+    var state = $(this).attr("data-state");
 
     if (state === still) {
-      state = animated
-
-    } else if (state === animated) {
-      state = still
-
+      $(this).attr("src", $(this).attr("data-animate"));
+      $(this).attr("data-state", "animate");
     }
+    else {
+      $(this).attr("src", $(this).attr("data-still"));
+      $(this).attr("data-state", still);
+    }
+
   })
 
   $(document).on("click", ".topicBtn", displayNewGif)

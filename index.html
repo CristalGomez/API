@@ -2,25 +2,48 @@
 <html>
 
 <head>
-    <title>API HW</title>
+    <title>Giphy API</title>
     <link rel="stylesheet" type="text/css" href="style.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 </head>
 
 <body>
-    <div id="buttons-view"></div>
-    <button id ="corgi" class="topicBtn" data-topic="corgi">Corgi</button>
-    <button id ="bunny" class="topicBtn" data-topic="bunny">Bunny</button>
-    <button id ="kitten" class="topicBtn" data-topic="kitten">Kitten</button>
-    <!-- Where the user will type in their gif topic/hit submit -->
-    <form id="gifs-form"> 
-        <label for="gif-input">Add a GIF</label>
-        <input type="text" id="gif-input"><br> 
+    <div class="container">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div id="buttons-view"></div>
+                <button id="corgi" class="topicBtn" data-topic="corgi">Corgi</button>
+                <button id="bunny" class="topicBtn" data-topic="bunny">Bunny</button>
+                <button id="kitten" class="topicBtn" data-topic="kitten">Kitten</button>
+            </div>
 
-        <!-- This is where the user will add their gif -->
-        <input id="add-gif" type="submit" value="Add a GIF">
-    </form>
-    <div id="gifs-view"></div>
+            <div class="col s12 m12 l12">
+                <!-- Where the user will type in their gif topic/hit submit -->
+                <form id="gifs-form">
+                    <input placeholder="add a GIF" type="text" id="gif-input"><br>
+
+                    <!-- This is where the user will add their gif -->
+                    <input id="add-gif" type="submit" value="Add a GIF">
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div id="gifs-view"></div>
+            </div>
+        </div>
+    </div>
+
+
+
     <script type="text/javascript" src="app.js"></script>
 </body>
 
